@@ -14,7 +14,7 @@ var Cylinder = {
       var dTheta = 2.0 * Math.PI / this.numSides;
       
       var positions = [ 0.0, 0.0, 0.0 ]; // start our positions list with the center point
-      var indices = [0]; // start with the center of the triangle fan
+      var indices = []; // start with the center of the triangle fan
       
       for (var i = 0; i < this.numSides; ++i) {
         var theta = i * dTheta;
@@ -24,34 +24,38 @@ var Cylinder = {
             
         positions.push(x, y, z);
       }
-	  for (var i = 0; i < this.numSides; ++i) {
-		var theta = i * dTheta;
-		var x = Math.cos(theta),
-		    y = Math.sin(theta),
-			z = 1.0;
-	    positions.push(x, y, z);
-	  }
-      positions.push(0, 0, 1);
-	  this.positions.count = positions.length/this.positions.numComponents;
-	  
-      indices.push(0, 1);  // Add in the first perimeter vertex's index to close the disk
-	  for (var i = this.numSides; i > 0; --i) {
-		indices.push(i);
-	  }
+      
+      for (var i = 0; i < this.numSides; ++i) {
+        var theta = i * dTheta;
+        var x = Math.cos(theta),
+            y = Math.sin(theta),
+            z = 1.0;
+	positions.push(x, y, z);
+      }
+      
+      positions.push(0.0, 0.0, 1.0);
+      this.positions.count = positions.length/this.positions.numComponents;
+      indices.push(0.0, 1.0);  // Add in the first perimeter vertex's index to close the disk
+      
+      for (var i = this.numSides; i > 0; --i) {
+      	indices.push(i);
+      }
+      
       indices.push(this.numSides*2+1);
-	  for (var i = 0; i < this.numSides; ++i) {
-		indices.push(i);
-	  }
+      
+      for (var i = 0; i < this.numSides; ++i) {
+      	indices.push(i+this.numSides+1);
+      }
+      
       indices.push(this.numSides+1);
-	  
-	  indices.push(1, this.numSides+1);
-	  
-	  for (var i = 1; i < this.numSides+1; ++i) {
-		indices.push(this.numSides+1-i);
-		indices.push(this.numSides*2+1-i);
-	  }
-	  
-	  console.log(indices);
+      indices.push(1, this.numSides+1)
+      
+      for (var i = 1; i < this.numSides+1; ++i) {
+	indices.push(this.numSides+1-i);
+	indices.push(this.numSides*2+1-i);
+      }
+      
+      console.log(indices);
 
       // initialize our object's shader program
       this.program = initShaders(gl, "Cylinder-vertex-shader", "Cylinder-fragment-shader");
@@ -80,15 +84,15 @@ var Cylinder = {
       // Render the base of the cylinder
       var count = this.numSides+2; // see init()
       var offset = 0; // start at the beginning of the buffer
-	  //gl.drawArrays(gl.POINTS, 0, this.positions.count);
+      //gl.drawArrays(gl.POINTS, 0, this.positions.count);
       gl.drawElements(gl.TRIANGLE_FAN, count, gl.UNSIGNED_SHORT, offset);
       
       offset += 2*count;
       count = this.numSides+2;
       gl.drawElements(gl.TRIANGLE_FAN, count, gl.UNSIGNED_SHORT, offset);
-	  
-	  offset += 2*count;
-	  count = this.numSides*2+2;
-	  gl.drawElements(gl.TRIANGLE_STRIP, count, gl.UNSIGNED_SHORT, offset);
+      
+      offset += 2*count;
+      count = this.numSides*2+2;
+      gl.drawElements(gl.TRIANGLE_STRIP, count, gl.UNSIGNED_SHORT, offset);
     }
 };
