@@ -30,12 +30,12 @@ var SolarSystem = {
     color : [ 1.0, 0.0, 0.0, 1.0 ]
   },
   Jupiter : {
-    radius : 11.21,
+    radius : 4.1,
     distance : 5.20,
     color : [ 1.0, 153/255, 0.0, 1.0 ]
   },
   Saturn : {
-    radius : 9.45,
+    radius : 3.6,
     distance : 9.58,
     color : [ 1.0, 1.0, 0.0, 1.0 ]
   },
