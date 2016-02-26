@@ -38,7 +38,7 @@ var V = undefined;  // matrix storing the viewing transformation
 // Projection transformation parameters
 var P = undefined;  // matrix storing the projection transformation
 var near = 10;      // near clipping plane's distance
-var far = 120;      // far clipping plane's distance
+var far = 250;      // far clipping plane's distance
 
 // Animation variables
 var time = 0.0;      // time, our global time constant, which is 
@@ -140,6 +140,8 @@ function render() {
   var planetaryScale = 15;
   
   ms.push();
+  // Modify the rotation angle by the angularVelocity
+  // instead: angle = time * (Earth days / planet Orbit time)
   ms.rotate(angle, [0, 1, 0]);
   ms.translate(distance * planetaryScale * Math.sin(angularVelocity), 0, distance * planetaryScale * Math.cos(angularVelocity));
   ms.scale(radius);
@@ -304,7 +306,7 @@ function resize() {
 
   gl.viewport(0, 0, w, h);
 
-  var fovy = 160.0; // degrees, originally 120
+  var fovy = 100.0; // degrees, originally 120
   var aspect = w / h;
 
   P = perspective(fovy, aspect, near, far);
